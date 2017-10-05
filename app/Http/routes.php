@@ -34,22 +34,3 @@ $app->get('token', function() {
 
 });
 */
-
-$app->get('/router', function() {
-	$api = new \RouterosAPI();
-//	$api->debug = true;
-
-	if ($api->connect('192.168.25.3', 'admin', '')) {
-		$data = $api->comm('/ip/arp/print', [
-			'?interface' => 'usuario'
-		]);
-		
-		echo '<pre>';
-
-		foreach($data as $host) {
-			echo $host['address'] . '	' . $host['mac-address'] . PHP_EOL;
-		}
-
-		$api->disconnect();
-	}
-});

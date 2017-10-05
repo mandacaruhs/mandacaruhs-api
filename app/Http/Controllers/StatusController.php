@@ -22,29 +22,29 @@ class StatusController extends Controller
     public function index() 
     {
         $statusPorta = StatusPorta::whereRaw("stp_data_cadastro >= NOW() - 1800")
-				  ->orderBy('status_porta_id', 'desc')
-				  ->first();
+                                  ->orderBy('status_porta_id', 'desc')
+                                  ->first();
 
         if($statusPorta) 
-	{
-	    $daily = StatusPorta::select(DB::raw('TIME_TO_SEC(TIME(stp_data_cadastro)) AS time'), 'stp_status')
-				->whereRaw("DATE(stp_data_cadastro) = CURDATE()")
-				->get()->toArray();
+        {
+           $daily = StatusPorta::select(DB::raw('TIME_TO_SEC(TIME(stp_data_cadastro)) AS time'), 'stp_status')
+                               ->whereRaw("DATE(stp_data_cadastro) = CURDATE()")
+                               ->get()->toArray();
 
-	    $timeline = array_fill(0, 288, -1);
+            $timeline = array_fill(0, 288, -1);
 
-	    foreach($daily as $time) {
-		$index = floor(intval($time['time']) / 300);
-		$timeline[$index] = [$time['stp_status'], gmdate('H:i', $time['time'])];
-	    }
+            foreach($daily as $time) {
+                $index = floor(intval($time['time']) / 300);
+                $timeline[$index] = [$time['stp_status'], gmdate('H:i', $time['time'])];
+            }
 
-	    Carbon::setLocale('pt_BR');
-	    $carbon = Carbon::instance($statusPorta->stp_data_cadastro);
+            Carbon::setLocale('pt_BR');
+            $carbon = Carbon::instance($statusPorta->stp_data_cadastro);
 
             return response()->json([ 
                 'status'   => $statusPorta->stp_status, 
                 'time'     => $carbon->diffForHumans(Carbon::now()), 
-		'timeline' => $timeline,
+                'timeline' => $timeline,
             ]);
         }
 
