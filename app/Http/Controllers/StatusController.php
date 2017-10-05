@@ -61,6 +61,7 @@ class StatusController extends Controller
 
         StatusPorta::create([
             'stp_status' => $status,
+            'stp_ip'     => $request->ip(),
         ]);
 
         return response()->json([ 'success' => true ]);

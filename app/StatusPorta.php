@@ -17,7 +17,10 @@ class StatusPorta extends Model
      *
      * @var array
      */
-    protected $fillable = ['stp_status'];
+    protected $fillable = [
+        'stp_status',
+        'stp_ip',
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
